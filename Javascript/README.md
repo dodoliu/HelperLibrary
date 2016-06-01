@@ -2,7 +2,7 @@
 > CoffeeScript实现的通用Javascript类库
 
 ### 安装
-> https://github.com/dodoliu/HelperLibrary.git
+> git clone https://github.com/dodoliu/HelperLibrary.git
 
 ### 编译
 > coffee -w -b -o . -c .

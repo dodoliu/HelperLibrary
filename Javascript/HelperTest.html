@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Javascript辅助类库单元测试</title>  
+  <link rel="stylesheet" type="text/css" href="./node_modules/qunitjs/qunit/qunit.css">
+  
+  <script type="text/javascript" src="Helper.js"></script>
+  <script type="text/javascript" src="./node_modules/qunitjs/qunit/qunit.js"></script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script type="text/javascript">
+  QUnit.test('Helper.DateBothSubtraction', function(assert) {
+    assert.equal(Helper.DateBothSubtraction('2016-5-30','2016-5-31','day'), -1, '日期相减,返回天');
+    assert.equal(Helper.DateBothSubtraction('2016-7-30','2016-5-31','month'), 2, '日期相减,返回30天的月');
+    assert.equal(Helper.DateBothSubtraction('2016-7-30','2016-5-31','month',30), 2, '日期相减,返回30天的月,指定天数');
+    assert.equal(Helper.DateBothSubtraction('2017-7-30','2016-7-30','year'), 1, '日期相减,返回365天的年');
+    assert.equal(Helper.DateBothSubtraction('2017-7-30','2016-7-30','year',365), 1, '日期相减,返回365天的年,指定天数');
+  });
+  
+  QUnit.test('Helper.DateAddition', function(assert) {
+    assert.equal(Helper.DateAddition('2016-5-10','second',1).getSeconds(), 1, '日期加上指定的秒数,返回秒');
+    assert.equal(Helper.DateAddition('2016-5-10','minute',1).getMinutes(), 1, '日期加上指定的分钟数,返回分钟');
+    assert.equal(Helper.DateAddition('2016-5-10','hour',1).getHours(), 1, '日期加上指定的小时数,返回小时');
+    assert.equal(Helper.DateAddition('2016-5-10','day',1).getDate(), 11, '日期加上指定的天数,返回天');
+    assert.equal(Helper.DateAddition('2016-5-10','month',1).getMonth()+1, 6, '日期加上指定的月数,返回月');
+    assert.equal(Helper.DateAddition('2016-5-10','year',1).getFullYear(), 2017, '日期加上指定的年数,返回年');
+  });
+
+  QUnit.test('Helper.FindDaysInMonth', function(assert) {
+    assert.equal(Helper.FindDaysInMonth(2015,2), 28, '返回指定年的指定月有多少天');
+  });
+
+  QUnit.test('Helper.IsEmpty', function(assert) {
+    assert.equal(Helper.IsEmpty(''), false, '是否为空字符窜判断');
+    assert.equal(Helper.IsEmpty(null), false, '是否为空字符窜判断');
+    assert.equal(Helper.IsEmpty(undefined), false, '是否为空字符窜判断');
+    assert.equal(Helper.IsEmpty(0), true, '是否为空字符窜判断');
+    assert.equal(Helper.IsEmpty("1"), true, '是否为空字符窜判断');
+  });
+
+  QUnit.test('Helper.IsPhone', function(assert) {
+    assert.equal(Helper.IsPhone('18612341234'), true, '手机号判断');
+    assert.notEqual(Helper.IsPhone('12345678901'), true, '手机号判断');
+  });
+
+  QUnit.test('Helper.IsChineseName', function(assert) {
+    assert.equal(Helper.IsChineseName("你好"), true, '中文姓名判断,最多50个字符');
+    assert.equal(Helper.IsChineseName("你"), false, '中文姓名判断,最多50个字符');
+    assert.equal(Helper.IsChineseName("你随碟附送11d"), false, '中文姓名判断,最多50个字符');
+  });
+
+  QUnit.test('Helper.GetQueryString', function(assert) {
+    assert.equal(Helper.GetQueryString("gws_rd"), "", '获取url参数,如果传入url,着获取的传入url中的参数');
+    assert.equal(Helper.GetQueryString("gws_rd","https://www.google.com/?gws_rd=ssl"), "ssl", '获取url参数,如果传入url,着获取的传入url中的参数');
+  });
+
+  QUnit.test('Helper.IsEmail', function(assert) {
+    assert.equal(Helper.IsEmail("a.com"), false, '邮箱的判断');
+    assert.equal(Helper.IsEmail("a@com"), false, '邮箱的判断');
+    assert.equal(Helper.IsEmail("a@b.com"), true, '邮箱的判断');
+    assert.equal(Helper.IsEmail("abc@163.com"), true, '邮箱的判断');
+  });
+
+  </script>
+</body>
+</html>

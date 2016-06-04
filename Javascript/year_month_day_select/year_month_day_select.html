@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.0.js" ></script>
+  <script type="text/javascript" src="../helper.js"></script>
+  <script type="text/javascript" src="year_month_day_select.js" defer='
+  defer'></script>
+</head>
+<body>
+
+<div data-bind="template:{name:'sl_year_month_day',data:$root.yearObj}"></div>  
+<div data-bind="template:{name:'sl_year_month_day',data:$root.monthObj}"></div>  
+<div data-bind="template:{name:'sl_year_month_day',data:$root.dayObj}"></div>  
+
+
+<script type="text/html" id="sl_year_month_day">  
+  <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]">
+    <option data-bind="value:$data.key,text:$data.value"></option>    
+  </select>
+
+</script>
+
+</body>
+</html>

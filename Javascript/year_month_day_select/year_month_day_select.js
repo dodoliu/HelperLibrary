@@ -99,7 +99,8 @@ YearMonthDaySelect = (function() {
       return selfVM.GenerateDayArray($("#" + arg.id + " option:selected").val(), 1, 1);
     };
     selfVM.ChangeMonth = function(arg) {
-      return selfVM.GenerateDayArray($("#" + arg.id + " option:selected").val(), 1, 1);
+      selfVM.GenerateDayArray($("#" + arg.id + " option:selected").val(), 1, 1);
+      return selfVM.GenerateDayArray($("#" + gParams.yearID + " option:selected").val(), $("#" + gParams.monthID + " option:selected").val(), 1);
     };
     selfVM.ChangeDay = function(arg) {};
     selfVM.Init = function() {

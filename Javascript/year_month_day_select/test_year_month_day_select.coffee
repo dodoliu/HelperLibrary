@@ -69,13 +69,13 @@ KoModel = ()->
       monthName: 'test_sl_month_name'
       monthClass: 'test_sl_month_class otherclassname'
 
-      dayTitle: '天'
+      dayTitle: '日'
       dayID: 'test_sl_day'
       dayName: 'test_sl_day_name'
       dayClass: 'test_sl_day_class otherclassname'
     return
 
-    
+
   self.ShowSL = () ->
     year = $("#test_sl_year option:selected").val()
     month = $("#test_sl_month option:selected").val()

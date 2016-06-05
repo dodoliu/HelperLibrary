@@ -135,10 +135,12 @@ class YearMonthDaySelect
 
     selfVM.ChangeYear = (arg) ->
       selfVM.GenerateMonthArray 1
-      selfVM.GenerateDayArray $("##{arg.id} option:selected").val(),1,1
+      selfVM.GenerateDayArray $("##{arg.id} option:selected").val(), 1, 1
 
     selfVM.ChangeMonth = (arg) ->
-      selfVM.GenerateDayArray $("##{arg.id} option:selected").val(),1,1
+      selfVM.GenerateDayArray $("##{arg.id} option:selected").val(), 1, 1
+      selfVM.GenerateDayArray $("##{gParams.yearID} option:selected").val(), $("##{gParams.monthID} option:selected").val(), 1
+
 
     selfVM.ChangeDay = (arg) ->
 

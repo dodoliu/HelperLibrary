@@ -12,7 +12,7 @@
 引入
 ```html
 <script type="text/javascript" src="year_month_day_select.js" defer='defer'></script>
-````
+```
 html中绑定
 ```html
 <div data-bind="component:'year_month_day_select_a' "></div>

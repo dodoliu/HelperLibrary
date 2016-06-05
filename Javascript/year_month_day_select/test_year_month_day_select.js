@@ -16,7 +16,7 @@ KoModel = function() {
       monthID: 'test_sl_month',
       monthName: 'test_sl_month_name',
       monthClass: 'test_sl_month_class otherclassname',
-      dayTitle: '天',
+      dayTitle: '日',
       dayID: 'test_sl_day',
       dayName: 'test_sl_day_name',
       dayClass: 'test_sl_day_class otherclassname'

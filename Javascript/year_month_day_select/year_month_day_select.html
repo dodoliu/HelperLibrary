@@ -4,24 +4,24 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title></title>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.0.js" ></script>
   <script type="text/javascript" src="../helper.js"></script>
-  <script type="text/javascript" src="year_month_day_select.js" defer='
-  defer'></script>
+  <script type="text/javascript" src="year_month_day_select.js" defer='defer'></script>
+  <script type="text/javascript" src="test_year_month_day_select.js" defer='defer'></script>
 </head>
 <body>
 
-<div data-bind="template:{name:'sl_year_month_day',data:$root.yearObj}"></div>  
-<div data-bind="template:{name:'sl_year_month_day',data:$root.monthObj}"></div>  
-<div data-bind="template:{name:'sl_year_month_day',data:$root.dayObj}"></div>  
+
+<div data-bind="component:'year_month_day_select_a' "></div>
+<!-- <div data-bind="component:'year_month_day_select_b' "></div> -->
 
 
-<script type="text/html" id="sl_year_month_day">  
-  <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]">
-    <option data-bind="value:$data.key,text:$data.value"></option>    
-  </select>
+<br/>
+<span id="span"></span>
 
-</script>
+
+<input type="button" data-bind="click:$root.ShowSL" value="获取">
 
 </body>
 </html>

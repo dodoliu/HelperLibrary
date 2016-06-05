@@ -21,10 +21,15 @@ html中绑定
 ```html
 <div data-bind="component:'year_month_day_select_b' "></div>
 ```
-
-> 日期默认选择有三种形式
-*
-> 年月日的默认选择为当前 日期
+获取值
+```javascript
+var year = $("#test_sl_year option:selected").val();
+var month = $("#test_sl_month option:selected").val();
+var day = $("#test_sl_day option:selected").val();
+$("#span").text(year + '-' + month + '-' + day);
+```
+日期默认选择有三种形式
+* 年月日的默认选择为当前 日期
 ```javascript
 new YearMonthDaySelect({
   initSelect: true,
@@ -43,8 +48,7 @@ new YearMonthDaySelect({
   dayClass: 'test_sl_day_class otherclassname'
 });
 ```
-*
-> 年月日的默认选择为 指定日期
+* 年月日的默认选择为 指定日期
 ```javascript
 new YearMonthDaySelect({
   initYear: 2013,
@@ -65,8 +69,7 @@ new YearMonthDaySelect({
   dayClass: 'test_sl_day_class otherclassname'
 });
 ```
-*
-> 年月日的默认选择为 年:当前年,月:1月,日:1日
+* 年月日的默认选择为 年:当前年,月:1月,日:1日
 ```javascript
 new YearMonthDaySelect({
   yearInterval: 10,

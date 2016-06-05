@@ -1,7 +1,7 @@
 ### 简介
-> 使用KnockoutJS实现年月日三个下拉级联,方便复用
-  模式A(year_month_day_select_a): 完整的年月日控件
-  模式B(year_month_day_select_b): 只包含年和月的控件
+> 使用KnockoutJS实现年月日三个下拉级联,方便复用  
+  模式A(year_month_day_select_a): 完整的年月日控件  
+  模式B(year_month_day_select_b): 只包含年和月的控件  
   基本参数的详细说明在 coffee中
 
 ### 编译
@@ -23,7 +23,7 @@ html中绑定
 ```
 
 > 日期默认选择有三种形式
-* A
+*
 > 年月日的默认选择为当前 日期
 ```javascript
 new YearMonthDaySelect({
@@ -43,7 +43,7 @@ new YearMonthDaySelect({
   dayClass: 'test_sl_day_class otherclassname'
 });
 ```
-* B
+*
 > 年月日的默认选择为 指定日期
 ```javascript
 new YearMonthDaySelect({
@@ -65,7 +65,7 @@ new YearMonthDaySelect({
   dayClass: 'test_sl_day_class otherclassname'
 });
 ```
-* C
+*
 > 年月日的默认选择为 年:当前年,月:1月,日:1日
 ```javascript
 new YearMonthDaySelect({
@@ -86,9 +86,9 @@ new YearMonthDaySelect({
 ```
 
 ### 注意事项
-> 该扩展所需依赖
-  jquery.js
-  helper.js
-  knockout.js
-  只能同时存在一种模式
+> 该扩展所需依赖  
+  jquery.js  
+  helper.js  
+  knockout.js  
+  只能同时存在一种模式  
   必须 通过 new YearMonthDaySelect() 调用,否则无法正常使用

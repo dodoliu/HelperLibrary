@@ -6,23 +6,26 @@ class YearMonthDaySelect
   #knockout.js
 
   #参数说明
-  #initSelect: {bool} 下拉选项的默认值,默认为当前年的1月1日,false为默认值
+  #initSelect: {int} 下拉选项的默认值,有几种模式,1:默认选中年月日;2:默认选中当前年月日;3:默认选中当前年1月1日
   #initYear: {int} 默认选择的年份,优先级比 initSelect 高
   #initMonth: {int} 默认选择的月份,优先级比 initSelect 高
   #initDay: {int} 默认选择的天,优先级比 initSelect 高
 
   #yearTitle: {string} 年份的title,默认值为 '年'
+  #yearDefault: {string} 当下拉没有选种时,选择该默认值
   #yearID: {string} 年份下拉的id属性,默认值为 'sl_year'
   #yearName: {string} 年份下拉的name属性,默认值为 'sl_year_name'
   #yearClass: {string} 年份下拉的class属性,默认值为 'sl_year_class'
   #yearInterval: {int} 绑定的年份前后间隔年数,默认值为5,意为当前年的前5年和后5年
 
   #monthTitle: {string} 年份的title,默认值为 '月'
+  #monthDefault: {string} 当下拉没有选种时,选择该默认值
   #monthID: {string} 年份下拉的id属性,默认值为 'sl_month'
   #monthName: {string} 年份下拉的name属性,默认值为 'sl_month_name'
   #monthClass: {string} 年份下拉的class属性,默认值为 'sl_month_class'
 
   #dayTitle: {string} 年份的title,默认值为 '日'
+  #dayDefault: {string} 当下拉没有选种时,选择该默认值
   #dayID: {string} 年份下拉的id属性,默认值为 'sl_day'
   #dayName: {string} 年份下拉的name属性,默认值为 'sl_day_name'
   #dayClass: {string} 年份下拉的class属性,默认值为 'sl_day_class'
@@ -70,6 +73,8 @@ class YearMonthDaySelect
       tmpDate = new Date()
       tmpDataArray = []
       tmpInterval = if gParams.yearInterval? then gParams.yearInterval else 5
+      tmpYearDefault = if yearDefault? then yearDefault else '年'
+      tmpDataArray.push key:-1, value: '年'
       for i in [tmpDate.getFullYear()-tmpInterval ... tmpDate.getFullYear()+tmpInterval]
         tmpDataArray.push
           key: i
@@ -91,6 +96,8 @@ class YearMonthDaySelect
     #defaultValue: 用于设置被选中的默认值
     selfVM.GenerateMonthArray = (defaultValue) ->
       tmpDataArray = []
+      tmpMonthDefault = if monthDefault? then monthDefault else '年'
+      tmpDataArray.push key:-1, value: '月'
       for i in [1 .. 12]
         tmpDataArray.push
           key: i
@@ -114,6 +121,8 @@ class YearMonthDaySelect
     #defaultValue:用于设置被选中的默认值
     selfVM.GenerateDayArray = (year,month,defaultValue) ->
       tmpDataArray = []
+      tmpDayDefault = if dayDefault? then dayDefault else '年'
+      tmpDataArray.push key:-1, value: '日'
       for i in [1 .. "#{Helper.FindDaysInMonth(year,month)}"]
         tmpDataArray.push
           key: i
@@ -134,12 +143,21 @@ class YearMonthDaySelect
       selfVM.dayObj tmpDay
 
     selfVM.ChangeYear = (arg) ->
-      selfVM.GenerateMonthArray 1
-      selfVM.GenerateDayArray $("##{arg.id} option:selected").val(), 1, 1
+      currValue = $("##{arg.id} option:selected").val()
+      if currValue is (if gParams.yearDefault? then gParams.yearDefault else '-1')
+        selfVM.GenerateMonthArray -1
+        selfVM.GenerateDayArray 1970, 1, gParams.dayDefault
+      else      
+        selfVM.GenerateMonthArray 1
+        selfVM.GenerateDayArray currValue, 1, 1
 
     selfVM.ChangeMonth = (arg) ->
-      selfVM.GenerateDayArray $("##{arg.id} option:selected").val(), 1, 1
-      selfVM.GenerateDayArray $("##{gParams.yearID} option:selected").val(), $("##{gParams.monthID} option:selected").val(), 1
+      currValue = $("##{arg.id} option:selected").val()
+      if currValue is (if gParams.monthDefault? then gParams.monthDefault else '-1')
+        selfVM.GenerateDayArray $("##{gParams.yearID} option:selected").val(), $("##{gParams.monthID} option:selected").val(), gParams.dayDefault
+      else        
+        # selfVM.GenerateDayArray $("##{arg.id} option:selected").val(), 1, 1
+        selfVM.GenerateDayArray $("##{gParams.yearID} option:selected").val(), $("##{gParams.monthID} option:selected").val(), 1
 
 
     selfVM.ChangeDay = (arg) ->
@@ -152,16 +170,28 @@ class YearMonthDaySelect
       else
         tmpDate = new Date()
         tmpYear = tmpDate.getFullYear()
-        selfVM.GenerateYearArray tmpYear
-        if gParams.initSelect
-          tmpMonth = tmpDate.getMonth() + 1
-          tmpDay = tmpDate.getDate()
-          selfVM.GenerateMonthArray tmpMonth
-          selfVM.GenerateDayArray tmpYear,  tmpMonth, tmpDay
-        else
-          selfVM.GenerateMonthArray 1
-          selfVM.GenerateDayArray tmpYear, 1, 1
+        switch gParams.initSelect
+          when 3
+            selfVM.GenerateYearArray tmpYear
+            selfVM.GenerateMonthArray 1
+            selfVM.GenerateDayArray tmpYear, 1, 1
+          when 2
+            tmpMonth = tmpDate.getMonth() + 1
+            tmpDay = tmpDate.getDate()            
+            selfVM.GenerateYearArray tmpYear
+            selfVM.GenerateMonthArray tmpMonth
+            selfVM.GenerateDayArray tmpYear,  tmpMonth, tmpDay
+          else
+            tmpYear = selfVM.IfThenElse gParams.yearDefault, '-1'
+            tmpMonth = if gParams.monthDefault? then gParams.monthDefault else '-1'
+            tmpDay = if gParams.dayDefault? then gParams.dayDefault else '-1'
+            selfVM.GenerateYearArray tmpYear
+            selfVM.GenerateMonthArray tmpMonth
+            selfVM.GenerateDayArray tmpYear, tmpMonth, tmpDay
 
+    selfVM.IfThenElse = (value,elseValue)->
+      return if value? then value else elseValue
+      
     selfVM.Init()
 
   ko.components.register 'year_month_day_select_a',

@@ -7,6 +7,10 @@ KoModel = function() {
   self.urls = {};
   self.Init = function() {
     new YearMonthDaySelect({
+      initSelect: 2,
+      yearDefault: 'year',
+      monthDefault: 'month',
+      dayDefault: 'day',
       yearInterval: 10,
       yearTitle: '年',
       yearID: 'test_sl_year',

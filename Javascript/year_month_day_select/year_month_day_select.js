@@ -21,20 +21,25 @@ YearMonthDaySelect = (function() {
     selfVM.monthObj = ko.observableArray();
     selfVM.dayObj = ko.observableArray();
     selfVM.GenerateYearArray = function(defaultValue) {
-      var i, j, ref, ref1, tmpDataArray, tmpDate, tmpInterval, tmpYear, tmpYearClass, tmpYearID, tmpYearName, tmpYearTitle;
+      var i, j, ref, ref1, tmpDataArray, tmpDate, tmpInterval, tmpYear, tmpYearClass, tmpYearDefault, tmpYearID, tmpYearName, tmpYearTitle;
       tmpDate = new Date();
       tmpDataArray = [];
-      tmpInterval = gParams.yearInterval != null ? gParams.yearInterval : 5;
+      tmpInterval = selfVM.IfThenElse(gParams.yearInterval, 5);
+      tmpYearDefault = selfVM.IfThenElse(gParams.yearDefault, '年');
+      tmpDataArray.push({
+        key: -1,
+        value: tmpYearDefault
+      });
       for (i = j = ref = tmpDate.getFullYear() - tmpInterval, ref1 = tmpDate.getFullYear() + tmpInterval; ref <= ref1 ? j < ref1 : j > ref1; i = ref <= ref1 ? ++j : --j) {
         tmpDataArray.push({
           key: i,
           value: i
         });
       }
-      tmpYearTitle = gParams.yearTitle != null ? gParams.yearTitle : '年';
-      tmpYearID = gParams.yearID != null ? gParams.yearID : 'sl_year';
-      tmpYearName = gParams.yearName != null ? gParams.yearName : 'sl_year_name';
-      tmpYearClass = gParams.yearClass != null ? gParams.yearClass : 'sl_year_class';
+      tmpYearTitle = selfVM.IfThenElse(gParams.yearTitle, '年');
+      tmpYearID = selfVM.IfThenElse(gParams.yearID, 'sl_year');
+      tmpYearName = selfVM.IfThenElse(gParams.yearName, 'sl_year_name');
+      tmpYearClass = selfVM.IfThenElse(gParams.yearClass, 'sl_year_class');
       tmpYear = {
         title: tmpYearTitle,
         id: tmpYearID,
@@ -47,18 +52,23 @@ YearMonthDaySelect = (function() {
       return selfVM.yearObj(tmpYear);
     };
     selfVM.GenerateMonthArray = function(defaultValue) {
-      var i, j, tmpDataArray, tmpMonth, tmpMonthClass, tmpMonthID, tmpMonthName, tmpMonthTitle;
+      var i, j, tmpDataArray, tmpMonth, tmpMonthClass, tmpMonthDefault, tmpMonthID, tmpMonthName, tmpMonthTitle;
       tmpDataArray = [];
+      tmpMonthDefault = selfVM.IfThenElse(gParams.monthDefault, '年');
+      tmpDataArray.push({
+        key: -1,
+        value: tmpMonthDefault
+      });
       for (i = j = 1; j <= 12; i = ++j) {
         tmpDataArray.push({
           key: i,
           value: i
         });
       }
-      tmpMonthTitle = gParams.monthTitle != null ? gParams.monthTitle : '月';
-      tmpMonthID = gParams.monthID != null ? gParams.monthID : 'sl_month';
-      tmpMonthName = gParams.monthName != null ? gParams.monthName : 'sl_month_name';
-      tmpMonthClass = gParams.monthClass != null ? gParams.monthClass : 'sl_month_class';
+      tmpMonthTitle = selfVM.IfThenElse(gParams.monthTitle, '月');
+      tmpMonthID = selfVM.IfThenElse(gParams.monthID, 'sl_month');
+      tmpMonthName = selfVM.IfThenElse(gParams.monthName, 'sl_month_name');
+      tmpMonthClass = selfVM.IfThenElse(gParams.monthClass, 'sl_month_class');
       tmpMonth = {
         title: tmpMonthTitle,
         id: tmpMonthID,
@@ -71,18 +81,23 @@ YearMonthDaySelect = (function() {
       return selfVM.monthObj(tmpMonth);
     };
     selfVM.GenerateDayArray = function(year, month, defaultValue) {
-      var i, j, ref, tmpDataArray, tmpDay, tmpDayClass, tmpDayID, tmpDayName, tmpDayTitle;
+      var i, j, ref, tmpDataArray, tmpDay, tmpDayClass, tmpDayDefault, tmpDayID, tmpDayName, tmpDayTitle;
       tmpDataArray = [];
+      tmpDayDefault = selfVM.IfThenElse(gParams.dayDefault, '日');
+      tmpDataArray.push({
+        key: -1,
+        value: tmpDayDefault
+      });
       for (i = j = 1, ref = "" + (Helper.FindDaysInMonth(year, month)); 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
         tmpDataArray.push({
           key: i,
           value: i
         });
       }
-      tmpDayTitle = gParams.dayTitle != null ? gParams.dayTitle : '日';
-      tmpDayID = gParams.dayID != null ? gParams.dayID : 'sl_day';
-      tmpDayName = gParams.dayName != null ? gParams.dayName : 'sl_day_name';
-      tmpDayClass = gParams.dayClass != null ? gParams.dayClass : 'sl_day_class';
+      tmpDayTitle = selfVM.IfThenElse(gParams.dayTitle, '日');
+      tmpDayID = selfVM.IfThenElse(gParams.dayID, 'sl_day');
+      tmpDayName = selfVM.IfThenElse(gParams.dayName, 'sl_day_name');
+      tmpDayClass = selfVM.IfThenElse(gParams.dayClass, 'sl_day_class');
       tmpDay = {
         title: tmpDayTitle,
         id: tmpDayID,
@@ -95,12 +110,26 @@ YearMonthDaySelect = (function() {
       return selfVM.dayObj(tmpDay);
     };
     selfVM.ChangeYear = function(arg) {
-      selfVM.GenerateMonthArray(1);
-      return selfVM.GenerateDayArray($("#" + arg.id + " option:selected").val(), 1, 1);
+      var currValue;
+      currValue = $("#" + arg.id + " option:selected").val();
+      if (currValue === (selfVM.IfThenElse(gParams.yearDefault, '-1'))) {
+        selfVM.GenerateMonthArray(-1);
+        return selfVM.GenerateDayArray(1970, 1, gParams.dayDefault);
+      } else {
+        selfVM.GenerateMonthArray(selfVM.IfThenElse(gParams.yearDefault, '-1'));
+        return selfVM.GenerateDayArray(currValue, -1, -1);
+      }
     };
     selfVM.ChangeMonth = function(arg) {
-      selfVM.GenerateDayArray($("#" + arg.id + " option:selected").val(), 1, 1);
-      return selfVM.GenerateDayArray($("#" + gParams.yearID + " option:selected").val(), $("#" + gParams.monthID + " option:selected").val(), 1);
+      var currValue, selectedMonth, selectedYear;
+      currValue = $("#" + arg.id + " option:selected").val();
+      selectedYear = $("#" + gParams.yearID + " option:selected").val();
+      selectedMonth = $("#" + gParams.monthID + " option:selected").val();
+      if (currValue === (selfVM.IfThenElse(gParams.monthDefault, '-1'))) {
+        return selfVM.GenerateDayArray(selectedYear, selectedMonth, gParams.dayDefault);
+      } else {
+        return selfVM.GenerateDayArray(selectedYear, selectedMonth, 1);
+      }
     };
     selfVM.ChangeDay = function(arg) {};
     selfVM.Init = function() {
@@ -112,16 +141,32 @@ YearMonthDaySelect = (function() {
       } else {
         tmpDate = new Date();
         tmpYear = tmpDate.getFullYear();
-        selfVM.GenerateYearArray(tmpYear);
-        if (gParams.initSelect) {
-          tmpMonth = tmpDate.getMonth() + 1;
-          tmpDay = tmpDate.getDate();
-          selfVM.GenerateMonthArray(tmpMonth);
-          return selfVM.GenerateDayArray(tmpYear, tmpMonth, tmpDay);
-        } else {
-          selfVM.GenerateMonthArray(1);
-          return selfVM.GenerateDayArray(tmpYear, 1, 1);
+        switch (gParams.initSelect) {
+          case 3:
+            selfVM.GenerateYearArray(tmpYear);
+            selfVM.GenerateMonthArray(1);
+            return selfVM.GenerateDayArray(tmpYear, 1, 1);
+          case 2:
+            tmpMonth = tmpDate.getMonth() + 1;
+            tmpDay = tmpDate.getDate();
+            selfVM.GenerateYearArray(tmpYear);
+            selfVM.GenerateMonthArray(tmpMonth);
+            return selfVM.GenerateDayArray(tmpYear, tmpMonth, tmpDay);
+          default:
+            tmpYear = selfVM.IfThenElse(gParams.yearDefault, '-1');
+            tmpMonth = selfVM.IfThenElse(gParams.monthDefault, '-1');
+            tmpDay = selfVM.IfThenElse(gParams.dayDefault, '-1');
+            selfVM.GenerateYearArray(tmpYear);
+            selfVM.GenerateMonthArray(tmpMonth);
+            return selfVM.GenerateDayArray(tmpYear, tmpMonth, tmpDay);
         }
+      }
+    };
+    selfVM.IfThenElse = function(value, elseValue) {
+      if (value != null) {
+        return value;
+      } else {
+        return elseValue;
       }
     };
     return selfVM.Init();

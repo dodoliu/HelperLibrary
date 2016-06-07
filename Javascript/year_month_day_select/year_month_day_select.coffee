@@ -6,7 +6,7 @@ class YearMonthDaySelect
   #knockout.js
 
   #参数说明
-  #initSelect: {int} 下拉选项的默认值,有几种模式,1:默认选中年月日;2:默认选中当前年月日;3:默认选中当前年1月1日
+  #initSelect: {int} 下拉选项的默认值,默认模式为1,有几种模式,1:默认选中年月日;2:默认选中当前年月日;3:默认选中当前年1月1日,
   #initYear: {int} 默认选择的年份,优先级比 initSelect 高
   #initMonth: {int} 默认选择的月份,优先级比 initSelect 高
   #initDay: {int} 默认选择的天,优先级比 initSelect 高
@@ -72,17 +72,17 @@ class YearMonthDaySelect
     selfVM.GenerateYearArray = (defaultValue) ->
       tmpDate = new Date()
       tmpDataArray = []
-      tmpInterval = if gParams.yearInterval? then gParams.yearInterval else 5
-      tmpYearDefault = if yearDefault? then yearDefault else '年'
-      tmpDataArray.push key:-1, value: '年'
+      tmpInterval = selfVM.IfThenElse gParams.yearInterval, 5
+      tmpYearDefault = selfVM.IfThenElse gParams.yearDefault, '年'
+      tmpDataArray.push key:-1, value: tmpYearDefault
       for i in [tmpDate.getFullYear()-tmpInterval ... tmpDate.getFullYear()+tmpInterval]
         tmpDataArray.push
           key: i
           value: i
-      tmpYearTitle = if gParams.yearTitle? then gParams.yearTitle else '年'
-      tmpYearID = if gParams.yearID? then gParams.yearID else 'sl_year'
-      tmpYearName = if gParams.yearName? then gParams.yearName else 'sl_year_name'
-      tmpYearClass = if gParams.yearClass? then gParams.yearClass else 'sl_year_class'
+      tmpYearTitle = selfVM.IfThenElse gParams.yearTitle, '年'
+      tmpYearID = selfVM.IfThenElse gParams.yearID, 'sl_year'
+      tmpYearName = selfVM.IfThenElse gParams.yearName, 'sl_year_name'
+      tmpYearClass = selfVM.IfThenElse gParams.yearClass, 'sl_year_class'
       tmpYear =
         title: tmpYearTitle #年
         id: tmpYearID #下拉框的id
@@ -96,16 +96,16 @@ class YearMonthDaySelect
     #defaultValue: 用于设置被选中的默认值
     selfVM.GenerateMonthArray = (defaultValue) ->
       tmpDataArray = []
-      tmpMonthDefault = if monthDefault? then monthDefault else '年'
-      tmpDataArray.push key:-1, value: '月'
+      tmpMonthDefault = selfVM.IfThenElse gParams.monthDefault, '年'
+      tmpDataArray.push key:-1, value: tmpMonthDefault
       for i in [1 .. 12]
         tmpDataArray.push
           key: i
           value: i
-      tmpMonthTitle = if gParams.monthTitle? then gParams.monthTitle else '月'
-      tmpMonthID = if gParams.monthID? then gParams.monthID else 'sl_month'
-      tmpMonthName = if gParams.monthName? then gParams.monthName else 'sl_month_name'
-      tmpMonthClass = if gParams.monthClass? then gParams.monthClass else 'sl_month_class'
+      tmpMonthTitle = selfVM.IfThenElse gParams.monthTitle, '月'
+      tmpMonthID = selfVM.IfThenElse gParams.monthID, 'sl_month'
+      tmpMonthName = selfVM.IfThenElse gParams.monthName, 'sl_month_name'
+      tmpMonthClass = selfVM.IfThenElse gParams.monthClass, 'sl_month_class'
       tmpMonth =
         title: tmpMonthTitle
         id: tmpMonthID #下拉框的id
@@ -121,17 +121,17 @@ class YearMonthDaySelect
     #defaultValue:用于设置被选中的默认值
     selfVM.GenerateDayArray = (year,month,defaultValue) ->
       tmpDataArray = []
-      tmpDayDefault = if dayDefault? then dayDefault else '年'
-      tmpDataArray.push key:-1, value: '日'
+      tmpDayDefault = selfVM.IfThenElse gParams.dayDefault, '日'
+      tmpDataArray.push key:-1, value: tmpDayDefault
       for i in [1 .. "#{Helper.FindDaysInMonth(year,month)}"]
         tmpDataArray.push
           key: i
           value: i
 
-      tmpDayTitle = if gParams.dayTitle? then gParams.dayTitle else '日'
-      tmpDayID = if gParams.dayID? then gParams.dayID else 'sl_day'
-      tmpDayName = if gParams.dayName? then gParams.dayName else 'sl_day_name'
-      tmpDayClass = if gParams.dayClass? then gParams.dayClass else 'sl_day_class'
+      tmpDayTitle = selfVM.IfThenElse gParams.dayTitle, '日'
+      tmpDayID = selfVM.IfThenElse gParams.dayID, 'sl_day'
+      tmpDayName = selfVM.IfThenElse gParams.dayName, 'sl_day_name'
+      tmpDayClass = selfVM.IfThenElse gParams.dayClass, 'sl_day_class'
       tmpDay =
         title: tmpDayTitle
         id: tmpDayID #下拉框的id
@@ -144,21 +144,21 @@ class YearMonthDaySelect
 
     selfVM.ChangeYear = (arg) ->
       currValue = $("##{arg.id} option:selected").val()
-      if currValue is (if gParams.yearDefault? then gParams.yearDefault else '-1')
+      if currValue is (selfVM.IfThenElse gParams.yearDefault, '-1')
         selfVM.GenerateMonthArray -1
         selfVM.GenerateDayArray 1970, 1, gParams.dayDefault
-      else      
-        selfVM.GenerateMonthArray 1
-        selfVM.GenerateDayArray currValue, 1, 1
+      else
+        selfVM.GenerateMonthArray (selfVM.IfThenElse gParams.yearDefault, '-1')
+        selfVM.GenerateDayArray currValue, -1, -1
 
     selfVM.ChangeMonth = (arg) ->
       currValue = $("##{arg.id} option:selected").val()
-      if currValue is (if gParams.monthDefault? then gParams.monthDefault else '-1')
-        selfVM.GenerateDayArray $("##{gParams.yearID} option:selected").val(), $("##{gParams.monthID} option:selected").val(), gParams.dayDefault
+      selectedYear = $("##{gParams.yearID} option:selected").val()
+      selectedMonth = $("##{gParams.monthID} option:selected").val()
+      if currValue is (selfVM.IfThenElse gParams.monthDefault, '-1')
+        selfVM.GenerateDayArray selectedYear, selectedMonth, gParams.dayDefault
       else        
-        # selfVM.GenerateDayArray $("##{arg.id} option:selected").val(), 1, 1
-        selfVM.GenerateDayArray $("##{gParams.yearID} option:selected").val(), $("##{gParams.monthID} option:selected").val(), 1
-
+        selfVM.GenerateDayArray selectedYear, selectedMonth, 1
 
     selfVM.ChangeDay = (arg) ->
 
@@ -183,8 +183,8 @@ class YearMonthDaySelect
             selfVM.GenerateDayArray tmpYear,  tmpMonth, tmpDay
           else
             tmpYear = selfVM.IfThenElse gParams.yearDefault, '-1'
-            tmpMonth = if gParams.monthDefault? then gParams.monthDefault else '-1'
-            tmpDay = if gParams.dayDefault? then gParams.dayDefault else '-1'
+            tmpMonth = selfVM.IfThenElse gParams.monthDefault, '-1'
+            tmpDay = selfVM.IfThenElse gParams.dayDefault, '-1'
             selfVM.GenerateYearArray tmpYear
             selfVM.GenerateMonthArray tmpMonth
             selfVM.GenerateDayArray tmpYear, tmpMonth, tmpDay

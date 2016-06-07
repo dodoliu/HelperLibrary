@@ -29,10 +29,13 @@ var day = $("#test_sl_day option:selected").val();
 $("#span").text(year + '-' + month + '-' + day);
 ```
 日期默认选择有三种形式
-* 年月日的默认选择为当前 日期
+* 模式1,默认选种 年月日
 ```javascript
-new YearMonthDaySelect({
-  initSelect: true,
+ new YearMonthDaySelect({
+  initSelect: 2,
+  yearDefault: 'year',
+  monthDefault: 'month',
+  dayDefault: 'day',
   yearInterval: 10,
   yearTitle: '年',
   yearID: 'test_sl_year',
@@ -42,13 +45,51 @@ new YearMonthDaySelect({
   monthID: 'test_sl_month',
   monthName: 'test_sl_month_name',
   monthClass: 'test_sl_month_class otherclassname',
-  dayTitle: '天',
+  dayTitle: '日',
   dayID: 'test_sl_day',
   dayName: 'test_sl_day_name',
   dayClass: 'test_sl_day_class otherclassname'
 });
 ```
-* 年月日的默认选择为 指定日期
+* 模式2, 默认选中 当前 年月日
+```javascript
+new YearMonthDaySelect({
+  initSelect: 2,
+  yearInterval: 10,
+  yearTitle: '年',
+  yearID: 'test_sl_year',
+  yearName: 'test_sl_year_name',
+  yearClass: 'test_sl_year_class otherclassname',
+  monthTitle: '月',
+  monthID: 'test_sl_month',
+  monthName: 'test_sl_month_name',
+  monthClass: 'test_sl_month_class otherclassname',
+  dayTitle: '日',
+  dayID: 'test_sl_day',
+  dayName: 'test_sl_day_name',
+  dayClass: 'test_sl_day_class otherclassname'
+});
+```
+* 模式3, 默认选中 当前 年,1月,1日
+```javascript
+new YearMonthDaySelect({
+  initSelect: 3,
+  yearInterval: 10,
+  yearTitle: '年',
+  yearID: 'test_sl_year',
+  yearName: 'test_sl_year_name',
+  yearClass: 'test_sl_year_class otherclassname',
+  monthTitle: '月',
+  monthID: 'test_sl_month',
+  monthName: 'test_sl_month_name',
+  monthClass: 'test_sl_month_class otherclassname',
+  dayTitle: '日',
+  dayID: 'test_sl_day',
+  dayName: 'test_sl_day_name',
+  dayClass: 'test_sl_day_class otherclassname'
+});
+```
+* 无论处于何种模式下,只要传入了默认值则选中指定的年月日
 ```javascript
 new YearMonthDaySelect({
   initYear: 2013,
@@ -63,31 +104,12 @@ new YearMonthDaySelect({
   monthID: 'test_sl_month',
   monthName: 'test_sl_month_name',
   monthClass: 'test_sl_month_class otherclassname',
-  dayTitle: '天',
+  dayTitle: '日',
   dayID: 'test_sl_day',
   dayName: 'test_sl_day_name',
   dayClass: 'test_sl_day_class otherclassname'
 });
 ```
-* 年月日的默认选择为 年:当前年,月:1月,日:1日
-```javascript
-new YearMonthDaySelect({
-  yearInterval: 10,
-  yearTitle: '年',
-  yearID: 'test_sl_year',
-  yearName: 'test_sl_year_name',
-  yearClass: 'test_sl_year_class otherclassname',
-  monthTitle: '月',
-  monthID: 'test_sl_month',
-  monthName: 'test_sl_month_name',
-  monthClass: 'test_sl_month_class otherclassname',
-  dayTitle: '天',
-  dayID: 'test_sl_day',
-  dayName: 'test_sl_day_name',
-  dayClass: 'test_sl_day_class otherclassname'
-});
-```
-
 ### 注意事项
 > 该扩展所需依赖  
   jquery.js  

@@ -86,3 +86,4 @@ Helper.GetQueryString = (key,url) ->
     if result is null or result.length < 1
       return ""    
     return result[1]
+

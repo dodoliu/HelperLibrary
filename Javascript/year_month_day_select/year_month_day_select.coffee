@@ -38,11 +38,11 @@ class YearMonthDaySelect
 
   koTemplateA =
     '
-    <div data-bind="template:{name:\'sl_year_month_day\',data:yearObj}"></div>
-    <div data-bind="template:{name:\'sl_year_month_day\',data:monthObj}"></div>
-    <div data-bind="template:{name:\'sl_year_month_day\',data:dayObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_a\',data:yearObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_a\',data:monthObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_a\',data:dayObj}"></div>
 
-    <script type="text/template" id="sl_year_month_day">
+    <script type="text/template" id="sl_year_month_day_a">
       <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]">
         <option data-bind="value:$data.key,text:$data.value"></option>
       </select>
@@ -51,14 +51,26 @@ class YearMonthDaySelect
     '
   koTemplateB =
     '
-    <div data-bind="template:{name:\'sl_year_month_day\',data:yearObj}"></div>
-    <div data-bind="template:{name:\'sl_year_month_day\',data:monthObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_b\',data:yearObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_b\',data:monthObj}"></div>
 
-    <script type="text/template" id="sl_year_month_day">
+    <script type="text/template" id="sl_year_month_day_b">
       <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]">
         <option data-bind="value:$data.key,text:$data.value"></option>
       </select>
       <span data-bind="text:$data.title"></span>
+    </script>
+    '
+  koTemplateC =
+    '
+    <div data-bind="template:{name:\'sl_year_month_day_c\',data:yearObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_c\',data:monthObj}"></div>
+    <div data-bind="template:{name:\'sl_year_month_day_c\',data:dayObj}"></div>
+
+    <script type="text/template" id="sl_year_month_day_c">
+      <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]">
+        <option data-bind="value:$data.key,text:$data.value"></option>
+      </select>
     </script>
     '
 
@@ -74,12 +86,12 @@ class YearMonthDaySelect
       tmpDataArray = []
       tmpInterval = selfVM.IfThenElse gParams.yearInterval, 5
       tmpYearDefault = selfVM.IfThenElse gParams.yearDefault, '年'
+      tmpYearTitle = selfVM.IfThenElse gParams.yearTitle, '年'
       tmpDataArray.push key:-1, value: tmpYearDefault
       for i in [tmpDate.getFullYear()-tmpInterval ... tmpDate.getFullYear()+tmpInterval]
         tmpDataArray.push
           key: i
-          value: i
-      tmpYearTitle = selfVM.IfThenElse gParams.yearTitle, '年'
+          value: i + gParams.yearTitle
       tmpYearID = selfVM.IfThenElse gParams.yearID, 'sl_year'
       tmpYearName = selfVM.IfThenElse gParams.yearName, 'sl_year_name'
       tmpYearClass = selfVM.IfThenElse gParams.yearClass, 'sl_year_class'
@@ -97,12 +109,12 @@ class YearMonthDaySelect
     selfVM.GenerateMonthArray = (defaultValue) ->
       tmpDataArray = []
       tmpMonthDefault = selfVM.IfThenElse gParams.monthDefault, '年'
+      tmpMonthTitle = selfVM.IfThenElse gParams.monthTitle, '月'
       tmpDataArray.push key:-1, value: tmpMonthDefault
       for i in [1 .. 12]
         tmpDataArray.push
           key: i
-          value: i
-      tmpMonthTitle = selfVM.IfThenElse gParams.monthTitle, '月'
+          value: i + gParams.monthTitle 
       tmpMonthID = selfVM.IfThenElse gParams.monthID, 'sl_month'
       tmpMonthName = selfVM.IfThenElse gParams.monthName, 'sl_month_name'
       tmpMonthClass = selfVM.IfThenElse gParams.monthClass, 'sl_month_class'
@@ -122,13 +134,12 @@ class YearMonthDaySelect
     selfVM.GenerateDayArray = (year,month,defaultValue) ->
       tmpDataArray = []
       tmpDayDefault = selfVM.IfThenElse gParams.dayDefault, '日'
+      tmpDayTitle = selfVM.IfThenElse gParams.dayTitle, '日'
       tmpDataArray.push key:-1, value: tmpDayDefault
       for i in [1 .. "#{Helper.FindDaysInMonth(year,month)}"]
         tmpDataArray.push
           key: i
-          value: i
-
-      tmpDayTitle = selfVM.IfThenElse gParams.dayTitle, '日'
+          value: i + gParams.dayTitle
       tmpDayID = selfVM.IfThenElse gParams.dayID, 'sl_day'
       tmpDayName = selfVM.IfThenElse gParams.dayName, 'sl_day_name'
       tmpDayClass = selfVM.IfThenElse gParams.dayClass, 'sl_day_class'
@@ -201,5 +212,10 @@ class YearMonthDaySelect
 
   ko.components.register 'year_month_day_select_b',
     template: koTemplateB
+    viewModel: (params) ->
+      KoViewModel params
+
+  ko.components.register 'year_month_day_select_c',
+    template: koTemplateC
     viewModel: (params) ->
       KoViewModel params

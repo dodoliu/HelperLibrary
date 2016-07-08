@@ -2,7 +2,7 @@
 var YearMonthDaySelect;
 
 YearMonthDaySelect = (function() {
-  var KoViewModel, gParams, koTemplateA, koTemplateB;
+  var KoViewModel, gParams, koTemplateA, koTemplateB, koTemplateC;
 
   gParams = {};
 
@@ -10,9 +10,11 @@ YearMonthDaySelect = (function() {
     gParams = args;
   }
 
-  koTemplateA = '<div data-bind="template:{name:\'sl_year_month_day\',data:yearObj}"></div> <div data-bind="template:{name:\'sl_year_month_day\',data:monthObj}"></div> <div data-bind="template:{name:\'sl_year_month_day\',data:dayObj}"></div> <script type="text/template" id="sl_year_month_day"> <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]"> <option data-bind="value:$data.key,text:$data.value"></option> </select> <span data-bind="text:$data.title"></span> </script>';
+  koTemplateA = '<div data-bind="template:{name:\'sl_year_month_day_a\',data:yearObj}"></div> <div data-bind="template:{name:\'sl_year_month_day_a\',data:monthObj}"></div> <div data-bind="template:{name:\'sl_year_month_day_a\',data:dayObj}"></div> <script type="text/template" id="sl_year_month_day_a"> <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]"> <option data-bind="value:$data.key,text:$data.value"></option> </select> <span data-bind="text:$data.title"></span> </script>';
 
-  koTemplateB = '<div data-bind="template:{name:\'sl_year_month_day\',data:yearObj}"></div> <div data-bind="template:{name:\'sl_year_month_day\',data:monthObj}"></div> <script type="text/template" id="sl_year_month_day"> <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]"> <option data-bind="value:$data.key,text:$data.value"></option> </select> <span data-bind="text:$data.title"></span> </script>';
+  koTemplateB = '<div data-bind="template:{name:\'sl_year_month_day_b\',data:yearObj}"></div> <div data-bind="template:{name:\'sl_year_month_day_b\',data:monthObj}"></div> <script type="text/template" id="sl_year_month_day_b"> <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]"> <option data-bind="value:$data.key,text:$data.value"></option> </select> <span data-bind="text:$data.title"></span> </script>';
+
+  koTemplateC = '<div data-bind="template:{name:\'sl_year_month_day_c\',data:yearObj}"></div> <div data-bind="template:{name:\'sl_year_month_day_c\',data:monthObj}"></div> <div data-bind="template:{name:\'sl_year_month_day_c\',data:dayObj}"></div> <script type="text/template" id="sl_year_month_day_c"> <select data-bind="attr:{id:$data.id,name:$data.name,class:$data.class},event:{change:$data.changeEvent},foreach:$data.dataArray,selectedOptions:[$data.selectedValue]"> <option data-bind="value:$data.key,text:$data.value"></option> </select> </script>';
 
   KoViewModel = function(params) {
     var selfVM;
@@ -26,6 +28,7 @@ YearMonthDaySelect = (function() {
       tmpDataArray = [];
       tmpInterval = selfVM.IfThenElse(gParams.yearInterval, 5);
       tmpYearDefault = selfVM.IfThenElse(gParams.yearDefault, '年');
+      tmpYearTitle = selfVM.IfThenElse(gParams.yearTitle, '年');
       tmpDataArray.push({
         key: -1,
         value: tmpYearDefault
@@ -33,10 +36,9 @@ YearMonthDaySelect = (function() {
       for (i = j = ref = tmpDate.getFullYear() - tmpInterval, ref1 = tmpDate.getFullYear() + tmpInterval; ref <= ref1 ? j < ref1 : j > ref1; i = ref <= ref1 ? ++j : --j) {
         tmpDataArray.push({
           key: i,
-          value: i
+          value: i + gParams.yearTitle
         });
       }
-      tmpYearTitle = selfVM.IfThenElse(gParams.yearTitle, '年');
       tmpYearID = selfVM.IfThenElse(gParams.yearID, 'sl_year');
       tmpYearName = selfVM.IfThenElse(gParams.yearName, 'sl_year_name');
       tmpYearClass = selfVM.IfThenElse(gParams.yearClass, 'sl_year_class');
@@ -55,6 +57,7 @@ YearMonthDaySelect = (function() {
       var i, j, tmpDataArray, tmpMonth, tmpMonthClass, tmpMonthDefault, tmpMonthID, tmpMonthName, tmpMonthTitle;
       tmpDataArray = [];
       tmpMonthDefault = selfVM.IfThenElse(gParams.monthDefault, '年');
+      tmpMonthTitle = selfVM.IfThenElse(gParams.monthTitle, '月');
       tmpDataArray.push({
         key: -1,
         value: tmpMonthDefault
@@ -62,10 +65,9 @@ YearMonthDaySelect = (function() {
       for (i = j = 1; j <= 12; i = ++j) {
         tmpDataArray.push({
           key: i,
-          value: i
+          value: i + gParams.monthTitle
         });
       }
-      tmpMonthTitle = selfVM.IfThenElse(gParams.monthTitle, '月');
       tmpMonthID = selfVM.IfThenElse(gParams.monthID, 'sl_month');
       tmpMonthName = selfVM.IfThenElse(gParams.monthName, 'sl_month_name');
       tmpMonthClass = selfVM.IfThenElse(gParams.monthClass, 'sl_month_class');
@@ -84,6 +86,7 @@ YearMonthDaySelect = (function() {
       var i, j, ref, tmpDataArray, tmpDay, tmpDayClass, tmpDayDefault, tmpDayID, tmpDayName, tmpDayTitle;
       tmpDataArray = [];
       tmpDayDefault = selfVM.IfThenElse(gParams.dayDefault, '日');
+      tmpDayTitle = selfVM.IfThenElse(gParams.dayTitle, '日');
       tmpDataArray.push({
         key: -1,
         value: tmpDayDefault
@@ -91,10 +94,9 @@ YearMonthDaySelect = (function() {
       for (i = j = 1, ref = "" + (Helper.FindDaysInMonth(year, month)); 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
         tmpDataArray.push({
           key: i,
-          value: i
+          value: i + gParams.dayTitle
         });
       }
-      tmpDayTitle = selfVM.IfThenElse(gParams.dayTitle, '日');
       tmpDayID = selfVM.IfThenElse(gParams.dayID, 'sl_day');
       tmpDayName = selfVM.IfThenElse(gParams.dayName, 'sl_day_name');
       tmpDayClass = selfVM.IfThenElse(gParams.dayClass, 'sl_day_class');
@@ -181,6 +183,13 @@ YearMonthDaySelect = (function() {
 
   ko.components.register('year_month_day_select_b', {
     template: koTemplateB,
+    viewModel: function(params) {
+      return KoViewModel(params);
+    }
+  });
+
+  ko.components.register('year_month_day_select_c', {
+    template: koTemplateC,
     viewModel: function(params) {
       return KoViewModel(params);
     }

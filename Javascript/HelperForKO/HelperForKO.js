@@ -23,12 +23,12 @@ HelperForKO.GetJSON = function(url, params, callback) {
   });
 };
 
-HelperForKO.EachArray2KOArray = function(originArray, resultArray, callback) {
+HelperForKO.EachArray2KOArray = function(originArray, resultArray, callback, obj2obj) {
   var i, item, len;
   resultArray.removeAll();
   for (i = 0, len = originArray.length; i < len; i++) {
     item = originArray[i];
-    resultArray.push(HelperForKO.Obj2Obj(item));
+    resultArray.push(obj2obj != null ? obj2obj(item) : HelperForKO.Obj2Obj(item));
   }
   if (callback != null) {
     callback();
@@ -45,5 +45,31 @@ HelperForKO.EachArrayFindTarget = function(array, condition, callback) {
       return result = item;
     }
   }
+  if (callback != null) {
+    callback();
+  }
   return result;
+};
+
+HelperForKO.EachArrayFindTargetArray = function(array, condition, callback) {
+  var i, item, len, result;
+  result = [];
+  for (i = 0, len = array.length; i < len; i++) {
+    item = array[i];
+    if (condition(item)) {
+      result.push(item);
+    }
+  }
+  if (callback != null) {
+    callback();
+  }
+  return result;
+};
+
+HelperForKO.POST = function(url, params, callback) {
+  $.post(url, params, function(result) {
+    if (callback != null) {
+      callback(result);
+    }
+  });
 };

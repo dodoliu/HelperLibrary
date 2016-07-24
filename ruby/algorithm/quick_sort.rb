@@ -1,33 +1,44 @@
+require 'pry'
 #快速排序
 
-
-def quick_sort!(args)
-  #定位轴点
-  point_index = find_point args
-  point = args[point_index]
-  for i in 0..(args.length-1)
-    if args[i] > point
-      swap args,point_index,i
+def division(arr, left, right)
+  # point = arr[Random.new.rand(arr.length - 1)]
+  #确定基点
+  point = arr[left]
+  while left < right
+    #如果右边的数大于基点,则不操作,反之交换位置
+    while left < right && arr[right] >= point
+      right -= 1
     end
+    swap arr, left, right
+    #如果左边的数小于基点,则不操作,反之交换位置
+    while left < right && arr[left] <= point
+      left += 1
+    end
+    swap arr, right, left
   end
-  quick_sort 
+  #重新确定
+  # arr[left] = point
 
-end
-
-def sort
-  
-end
-
-#定位轴点
-def find_point(args)
-  #随机取一个数为轴点,相对于指定序列第一个或最后一个数时,如果遇到有序序列时,效率要高一些.
-  rand = Random.new
-  rand.rand 0..(args.length-1)
+  #返回轴点下标
+  left
 end
 
 #交换位置
-def swap(args,low,high)
-  args[low],args[high] = args[high],args[low]
+def swap(arr,l,h)
+  arr[l],arr[h] = arr[h],arr[l]
+  p arr
 end
 
-p find_point [3,2,1]
+def quick_sort!(arr, left, right)
+  if left < right
+    p = division arr, left, right
+
+    #递归
+    quick_sort! arr, left, p - 1
+    quick_sort! arr, p + 1, right
+  end
+end
+
+binding.pry
+quick_sort! [66,13,51,76,81,26,57,69,23], 0, 8
